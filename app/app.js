@@ -2,10 +2,12 @@
     'use strict';
 
     angular
-        .module('meetUrl', [
-            'ui.router'
+        .module('meetIrl', [
+            'ui.router',
+            'api.users',
+            'components.users'
         ])
         .config(function ($urlRouterProvider) {
-           $urlRouterProvider.otherwise("/");
+           $urlRouterProvider.otherwise("/users");
         });
 })();

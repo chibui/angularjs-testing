@@ -10,16 +10,17 @@ describe('UsersController', function () {
         { id: '4', name: 'Bill', role: 'Designer', location: 'LA', twitter: 'dabill' }
     ];
 
+    // load dependancies
     beforeEach(angular.mock.module('ui.router'));
-
     beforeEach(angular.mock.module('components.users'));
-    // add the module for Users serive
+
+    // add the module for Users service
     beforeEach(angular.mock.module('api.users'));
 
+    // inject controller service to test
     beforeEach(inject(function (_$controller_, _Users_) {
 
         $controller = _$controller_;
-
         UsersFactory = _Users_;
 
         // spy and force the return value when UsersFactory.all() is called
