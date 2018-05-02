@@ -28,11 +28,12 @@ describe('components.profile', function () {
     beforeEach(angular.mock.module('components.profile'));
 
     // inject controller
-    beforeEach(inject(function (_$controller_, _Pokemon_, _$q_, _$httpBackend_) {
+    beforeEach(inject(function (_$controller_, _Pokemon_, _$q_, _$httpBackend_, _$state_) {
         $controller = _$controller_;
         PokemonFactory = _Pokemon_;
         $q = _$q_;
         $httpBackend = _$httpBackend_;
+        $state = _$state_;
     }));
 
     describe('ProfileController', function () {
@@ -52,7 +53,7 @@ describe('components.profile', function () {
             };
 
             // create instance of controller and add dependencies
-            ProfileController = $controller('ProfileController', { resolvedUser: singleUser, Pokemon: PokemonFactory });
+            ProfileController = $controller('ProfileController', { resolvedUser: singleUser, Pokemon: PokemonFactory, $state: $state });
         });
 
         // verify controller exists
@@ -139,6 +140,25 @@ describe('components.profile', function () {
             // add expectation that our image will be set to a placeholder image
             expect(PokemonFactory.findByName).toHaveBeenCalledWith('godzilla');
             expect(ProfileController.user.pokemon.image).toEqual('http://i.imgur.com/HddtBOT.png');
+        });
+    });
+
+    describe('Profile Controller with a invalid resolved user', function () {
+        var singleUser,
+            ProfileController;
+
+        beforeEach(function () {
+            // add spy to $state service
+            spyOn($state, "go");
+            spyOn(PokemonFactory, "findByName");
+
+            ProfileController = $controller('ProfileController', { resolvedUser: singleUser, Pokemon: PokemonFactory, $state: $state });
+        });
+
+        it('should redirect to the 404 page', function () {
+            expect(ProfileController.user).toBeUndefined();
+            expect(PokemonFactory.findByName).not.toHaveBeenCalled();
+            expect($state.go).toHaveBeenCalledWith('404');
         });
     });
 });

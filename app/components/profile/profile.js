@@ -9,9 +9,18 @@
 
             vm.user = resolvedUser;
 
+            // set the resolvedUser if it exists, else redirect to 404
+
+            if (resolvedUser) {
+                vm.user = resolvedUser;
+            } else {
+                return $state.go('404')
+            }
+
             // call pokemon service using resovled users pokemon
             Pokemon.findByName(vm.user.pokemon.name)
                 .then(function (pokemon) {
+                    console.log(pokemon);
                     vm.user.pokemon.id = pokemon.id;
                     vm.user.pokemon.image = pokemon.sprites.front_default;
                     vm.user.pokemon.type = pokemon.types[0].type.name;
